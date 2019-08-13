@@ -1,5 +1,5 @@
 ---
-region: ap-southeast-1
+region: {{ cloudwatch_exporter_region }}
 metrics:
 {% for namespace in cloudwatch_exporter_namespaces %}
 {% for metric in namespace.metrics %}
@@ -7,7 +7,7 @@ metrics:
    aws_metric_name: {{ metric.name }}
    aws_dimensions: [{{ metric.dimension }}]
    aws_dimension_select_regex:
-     FunctionName: [{{ metric.dimension_select_regex }}]
+     {{ metric.dimension }}: [{{ metric.dimension_select_regex }}]
    delay_seconds: {{ cloudwatch_exporter_delay_seconds }}
 {% endfor %}
 {% endfor %}
