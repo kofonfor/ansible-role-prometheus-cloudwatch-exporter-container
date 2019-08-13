@@ -5,9 +5,11 @@ metrics:
 {% for metric in namespace.metrics %}
  - aws_namespace: {{ namespace.name }}
    aws_metric_name: {{ metric.name }}
-   aws_dimensions: [{{ metric.dimension }}]
+   aws_dimensions: [{% for dimension in metric.dimensions %}{{ dimension.name }}{% if not loop.last %},{% endif %}{% endfor %}]
    aws_dimension_select_regex:
-     {{ metric.dimension }}: [{{ metric.dimension_select_regex }}]
+{% for dimension in metric.dimensions %}
+     {{ dimension.name }}: [{{ dimension.select_regex }}]
+{% endfor %}
    delay_seconds: {{ cloudwatch_exporter_delay_seconds }}
 {% endfor %}
 {% endfor %}
