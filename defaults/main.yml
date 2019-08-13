@@ -1,0 +1,4 @@
+cloudwatch_exporter_container_host_address: 0.0.0.0
+cloudwatch_exporter_port: 9106
+cloudwatch_exporter_delay_seconds: 600
+ext_cloudwatch_exporter_conf_volume: /var/lib/docker-extvols/cloudwatch-exporter-{{ cloudwatch_exporter_port }}/conf

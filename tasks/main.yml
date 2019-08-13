@@ -1,0 +1,23 @@
+- name: create ext volume for conf
+  file: state=directory path={{ ext_cloudwatch_exporter_conf_volume }}
+
+- name: put config.yml
+  template: src=config.yml dest={{ ext_cloudwatch_exporter_conf_volume }}/config.yml
+
+- name: start a CloudWatch exporter
+  docker_container:
+    name: cloudwatch-exporter-{{ cloudwatch_exporter_port }}
+    image: prom/cloudwatch-exporter
+    state: started
+    recreate: yes
+    restart_policy: always
+    read_only: yes
+    exposed_ports:
+      - 9106
+    ports:
+      - "{{ cloudwatch_exporter_container_host_address }}:{{ cloudwatch_exporter_port }}:9106"
+    volumes:
+      - "{{ ext_cloudwatch_exporter_conf_volume }}:/config"
+    env:
+      AWS_ACCESS_KEY: "{{ cloudwatch_aws_access_key }}" 
+      AWS_SECRET_KEY: "{{ cloudwatch_aws_secret_key }}"
